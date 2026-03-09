@@ -1,64 +1,68 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../services/api";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 export default function MyBookings() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
-    api
-      .get("/bookings/my")
-      .then((res) => setBookings(res.data))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, [user, navigate]);
+    api.get("/bookings/my").then((res) => setBookings(res.data)).catch(console.error);
+  }, []);
 
   return (
-    <div className="page">
-      <div className="hero compact">
-        <div>
-          <h1 className="title">My Bookings ✅</h1>
-          <p className="subtitle">Your booked events in one place.</p>
+    <div className="homePage">
+      <section className="eventsSection">
+        <div className="sectionTop">
+          <h2>My Bookings</h2>
+          <p>See all events you have already joined or booked.</p>
         </div>
-      </div>
 
-      {loading ? (
-        <p className="muted">Loading bookings...</p>
-      ) : bookings.length === 0 ? (
-        <div className="empty">
-          <h3>No bookings yet</h3>
-          <p className="muted">Go to Home and book your first event.</p>
-          <button className="btn btnPrimary" onClick={() => navigate("/")}>
-            Browse Events
-          </button>
+        <div className="eventsGrid">
+          {bookings.length === 0 ? (
+            <p className="noEventsText">No bookings found</p>
+          ) : (
+            bookings.map((booking, index) => {
+              const event = booking.events;
+              const status = getStatus(event?.date);
+
+              return (
+                <div className="eventCard" key={index}>
+                  <span className="eventBadge">{status}</span>
+                  <h3>{event?.title || "Booked Event"}</h3>
+                  <p>📅 {event?.date}</p>
+                  <p>📍 {event?.location}</p>
+                  <p>⏰ Reminder: {getReminderText(event?.date)}</p>
+                  <button className="bookBtn" disabled>
+                    Joined
+                  </button>
+                </div>
+              );
+            })
+          )}
         </div>
-      ) : (
-        <div className="grid">
-          {bookings.map((b, idx) => {
-            const ev = b.events;
-            return (
-              <div key={idx} className="card">
-                <h3 className="cardTitle">{ev?.title || "Event"}</h3>
-                <p className="cardMeta">
-                  <span>📅 {ev?.date}</span>
-                  <span className="dot">•</span>
-                  <span>📍 {ev?.location}</span>
-                </p>
-                <div className="badge green">BOOKED</div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      </section>
     </div>
   );
+}
+
+function getStatus(dateString) {
+  const today = new Date();
+  const eventDate = new Date(dateString);
+
+  const t = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+  const e = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate()).getTime();
+
+  if (e < t) return "Completed";
+  if (e === t) return "Today";
+  return "Upcoming";
+}
+
+function getReminderText(dateString) {
+  const today = new Date();
+  const eventDate = new Date(dateString);
+  const diff = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+
+  if (diff < 0) return "Event completed";
+  if (diff === 0) return "Starts today";
+  if (diff === 1) return "Starts tomorrow";
+  return `Starts in ${diff} days`;
 }

@@ -12,25 +12,34 @@ export default function Navbar() {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", padding: "14px 24px", borderBottom: "1px solid #ddd" }}>
-      <h3 style={{ margin: 0 }}>Online Event Management</h3>
+    <header className="topNav">
+      <div className="topNavInner">
+        <div className="brand" onClick={() => navigate(user ? "/dashboard" : "/")}>
+          <span className="brandDot" />
+          <span>Online Event Management</span>
+        </div>
 
-      <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-        <Link to="/">Home</Link>
-        <Link to="/bookings">My Bookings</Link>
+        <nav className="navLinks">
+          <Link to={user ? "/dashboard" : "/"}>Home</Link>
+          {user && <Link to="/bookings">My Bookings</Link>}
 
-        {user ? (
-          <>
-            <span style={{ opacity: 0.8 }}>Hi, {user.name || user.email}</span>
-            <button onClick={handleLogout}>Logout</button>
-          </>
-        ) : (
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
-          </>
-        )}
+          {user ? (
+            <>
+              <span className="userText">Hi, {user.name || user.email}</span>
+              <button className="navBtn" onClick={handleLogout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <button className="navBtn" onClick={() => navigate("/signup")}>
+                Sign Up
+              </button>
+            </>
+          )}
+        </nav>
       </div>
-    </div>
+    </header>
   );
 }

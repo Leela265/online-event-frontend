@@ -24,7 +24,7 @@ export default function Login() {
       login({ token: res.data.token, user: res.data.user });
 
       alert("✅ Login successful");
-      navigate("/");
+      navigate("/dashboard");
     } catch (e2) {
       alert(e2?.response?.data?.message || "❌ Login failed");
     } finally {

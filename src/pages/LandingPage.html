@@ -1,0 +1,83 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+export default function LandingPage() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="homePage">
+      <section className="mainHero">
+        <div className="heroLeft">
+          <p className="heroTag">EVENT MANAGEMENT SOFTWARE</p>
+          <h1 className="heroHeading">
+            An event tech platform for in-person, virtual, and hybrid experiences
+          </h1>
+          <p className="heroText">
+            Plan, manage, and book amazing events with a modern event platform.
+            Build smooth experiences for attendees and simplify your entire workflow.
+          </p>
+
+          <div className="heroButtons">
+            <button className="primaryBtn" onClick={() => navigate("/signup")}>
+              Get Started
+            </button>
+            <button className="secondaryBtn" onClick={() => navigate("/login")}>
+              Login
+            </button>
+          </div>
+        </div>
+
+        <div className="heroFormCard">
+          <h2>See the power of your event platform</h2>
+          <div className="heroFormGrid">
+            <input type="text" placeholder="First name" />
+            <input type="text" placeholder="Last name" />
+            <input type="text" placeholder="Organization" />
+            <input type="text" placeholder="Phone number" />
+          </div>
+          <input type="email" placeholder="Work email" className="fullInput" />
+          <input type="text" placeholder="Job function" className="fullInput" />
+          <input type="text" placeholder="Country" className="fullInput" />
+          <input type="text" placeholder="Event type" className="fullInput" />
+          <button className="formBtn">Get started</button>
+        </div>
+      </section>
+
+      <section className="videoSection">
+        <div className="videoCard">
+          <img
+            src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1400&q=80"
+            alt="Event preview"
+          />
+        </div>
+      </section>
+
+      <section className="eventsSection">
+        <div className="sectionTop">
+          <h2>Why choose our platform?</h2>
+          <p>Manage registrations, bookings, and event experiences in one place.</p>
+        </div>
+
+        <div className="eventsGrid">
+          <div className="eventCard">
+            <span className="eventBadge">Smart Booking</span>
+            <h3>Easy Event Booking</h3>
+            <p>Users can browse events and register in seconds.</p>
+          </div>
+
+          <div className="eventCard">
+            <span className="eventBadge">Live Access</span>
+            <h3>Track My Bookings</h3>
+            <p>See all booked events with status and upcoming details.</p>
+          </div>
+
+          <div className="eventCard">
+            <span className="eventBadge">Reminder Ready</span>
+            <h3>Upcoming Alerts</h3>
+            <p>Know which event is next and how many days remain.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
